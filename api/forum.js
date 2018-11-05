@@ -1,4 +1,5 @@
 var ensureAuthenticated = require('../middleware/auth').ensureAuthenticated;
+var ensureAuthenticatedAdmin = require('../middleware/auth').ensureAuthenticatedAdmin;
 app.get('/forums', function(req, resp){
     getForums(function (data, err){
         if(err){
@@ -10,7 +11,7 @@ app.get('/forums', function(req, resp){
 
 
 })
-app.get('/forums/:id', function(req, resp){
+app.get('/forums/:id(\\d+)', function(req, resp){
     getForumById(req.params.id,function (data, err){
         if(err){
             resp.status(400).send({error: "Unable to retrieve forum with id: " + req.params.id});
@@ -20,12 +21,12 @@ app.get('/forums/:id', function(req, resp){
     })
 })
 
-app.delete('/forums/:id', ensureAuthenticated, function(req, resp){
+app.delete('/forums/:id(\\d+)', ensureAuthenticatedAdmin, function(req, resp){
     deleteForum(req.params.id, function (data, err){
-        if(err){
+        if(err || data===0){
             resp.status(400).send({error: "Unable to delete forum with id: " + req.params.id});
         }else{
-        resp.status(200).send({error: "Deleted forum with id: " + req.params.id});
+        resp.status(200).send({message: "Deleted forum with id: " + req.params.id});
         }
     })
 
@@ -38,7 +39,7 @@ app.post('/forums',ensureAuthenticated, function(req, resp){
             if(err){
                 resp.status(400).send({error: "Unable to create forum"});
             }else{
-            resp.status(201).send(data);
+            resp.status(201).send({id: data});
             }
         })
     }
@@ -47,14 +48,14 @@ app.post('/forums',ensureAuthenticated, function(req, resp){
     }
 })
 
-app.put('/forums/:id', ensureAuthenticated, function(req, resp){
+app.put('/forums/:id(\\d+)', ensureAuthenticatedAdmin, function(req, resp){
     var name = req.body.name;
     if(name){
         updateForum(req.params.id, name, function(data, err) {
             if(err){
                 resp.status(400).send({error: "Unable to update forum with id: " + req.params.id});
             }else{
-            resp.status(200).send("Updated forum with id: " + req.params.id);
+            resp.status(200).send({message: "Updated forum with id: " + req.params.id});
             }
         })
     }
@@ -84,7 +85,7 @@ function getForumById(id, callback){
 function createForum(name, callback){
     knex('Forum').insert({name: name},'id').
     then(function (data){
-        callback(data, undefined);
+        callback(data[0], undefined);
     }).
     catch(function (error){
         callback(undefined, error);
@@ -98,12 +99,12 @@ function deleteForum(id, callback){
     }).
     catch(function (error){
         callback(undefined, error);
-     });;
+     });
 }
 
-function updateForum(id, data, callback,err){
+function updateForum(id, name, callback){
     knex('Forum').where('id',id).update({
-        name: data.name
+        name: name
     }).then(function (data){
         callback(data, undefined);
     }).

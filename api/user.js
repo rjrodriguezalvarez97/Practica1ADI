@@ -12,6 +12,7 @@ app.post('/login', function(req, resp){
                         sub: data.id,
                         iat: moment().unix(),
                         exp: moment().add(14, "days").unix(),
+                        isAdmin: data.isAdmin,
                     };
                     var token = jwt.encode(payload, SECRET);
                     resp.status(200);
@@ -19,7 +20,7 @@ app.post('/login', function(req, resp){
                 }
                 else{
                     resp.status(401);
-                    resp.send("Unauthorized");
+                    resp.send({error: "Unauthorized"});
                 }
             })
         }
@@ -30,7 +31,7 @@ app.post('/login', function(req, resp){
     }
 });
 function findUser(email, password, callback){
-    knex.select('id').from('User').where('email',email).andWhere('password',password).
+    knex.select('id', 'isAdmin').from('User').where('email',email).andWhere('password',password).
     then(function(data){
         if(data.length > 0)
             callback(data[0]);

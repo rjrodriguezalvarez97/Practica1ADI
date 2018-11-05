@@ -19,20 +19,18 @@ app.get('/', function(req, resp){
     resp.status(200);
     resp.send("Hola");
 })
-app.get('/privado', ensureAuthenticated, function(req, resp){
-    resp.status(200).send("Estas dentro hamijo con id: " + req.user);
-})
 
 require('./api/user');
 
 require('./api/forum');
 
+require('./api/subforum');
 
 
 
 
 
 
-app.listen(3001, function () {
-    console.log("El servidor express está en el puerto 3001");
+app.listen(3000, function () {
+    console.log("El servidor express está en el puerto 3000");
  });
