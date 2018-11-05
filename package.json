@@ -1,0 +1,27 @@
+{
+  "name": "practica1adi",
+  "version": "1.0.0",
+  "description": "El objetivo de esta práctica es aprender a diseñar correctamente APIs REST. Cada uno podéis elegir el dominio que queráis para la aplicación: una tienda, una red social, un sitio de crowdfunding,…",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rjrodriguezalvarez97/Practica1ADI.git"
+  },
+  "author": "ricky",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rjrodriguezalvarez97/Practica1ADI/issues"
+  },
+  "homepage": "https://github.com/rjrodriguezalvarez97/Practica1ADI#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "jwt-simple": "^0.5.5",
+    "knex": "^0.15.2",
+    "moment": "^2.22.2",
+    "sqlite3": "^4.0.3"
+  }
+}
