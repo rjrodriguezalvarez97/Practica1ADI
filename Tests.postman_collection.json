@@ -1,0 +1,578 @@
+{
+	"info": {
+		"_postman_id": "ac1a1ec6-e1cc-4cd4-83a8-78eacb1b967b",
+		"name": "Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login correcto",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1cc7aa62-fd0e-4948-80c4-1507f324ceb8",
+						"exec": [
+							"pm.test(\"response is ok\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Token is returned\", function(){\r",
+							"    pm.response.to.be.json;\r",
+							"    pm.response.to.have.jsonBody(\"token\");\r",
+							"    pm.response.to.not.have.jsonBody(\"error\");\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"email\": \"otro\",\n\t\"password\": \"otro\"\n}"
+				},
+				"url": {
+					"raw": "localhost:3000/login",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"login"
+					]
+				},
+				"description": "Comprueba login de un usuario normal"
+			},
+			"response": []
+		},
+		{
+			"name": "Login incorrecto",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1cc7aa62-fd0e-4948-80c4-1507f324ceb8",
+						"exec": [
+							"pm.test(\"response is Unauthorized\", function () {\r",
+							"    pm.response.to.have.status(401);\r",
+							"});\r",
+							"pm.test(\"Error is shown\", function(){\r",
+							"    pm.response.to.be.json;\r",
+							"    pm.response.to.have.jsonBody(\"error\");\r",
+							"    pm.response.to.not.have.jsonBody(\"token\");\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"email\": \"admin@admin.com\",\n\t\"password\": \"otro\"\n}"
+				},
+				"url": {
+					"raw": "localhost:3000/login",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Modificar nombre de un foro",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "fdca25a2-4dc1-4416-b548-8c9784404fa8",
+						"exec": [
+							"pm.test(\"response is ok\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Forum is updated\", function(){\r",
+							"    pm.response.to.be.json;\r",
+							"    pm.response.to.have.jsonBody(\"message\");\r",
+							"    pm.response.to.not.have.jsonBody(\"error\");\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.message).to.eql(\"Updated forum with id: 4\");\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjEsImlhdCI6MTU0MTQzODUyMCwiZXhwIjoxNTQyNjQ4MTIwfQ.ygEGmSVvGKR-48EiWOgN93EZCvYY4LOZWExv6_NeCoY",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"Otro nombre guay\"\n}"
+				},
+				"url": {
+					"raw": "localhost:3000/forums/4",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"forums",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener subforo por id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6f086719-9382-4e7f-9fd0-ba1d18ef80f7",
+						"exec": [
+							"pm.test(\"response is ok\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Subforum is retrieved\", function(){\r",
+							"        pm.response.to.have.body('[{\"id\":1,\"title\":\"Subforo divertido\",\"forum\":1}]');\r",
+							"\r",
+							"    // pm.expect(jsonData.message).to.eql(\"Updated forum with id: 4\");\r",
+							"    \r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:3000/subforums/1",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"subforums",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener subforo por id que no existe",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6f086719-9382-4e7f-9fd0-ba1d18ef80f7",
+						"exec": [
+							"pm.test(\"response is ok\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Subforum is not retrieved\", function(){\r",
+							"        pm.response.to.have.body(\"[]\");\r",
+							"        pm.response.to.not.have.body(\"error\")\r",
+							"    // pm.expect(jsonData.message).to.eql(\"Updated forum with id: 4\");\r",
+							"    \r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:3000/subforums/99",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"subforums",
+						"99"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Borra foro no siendo admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "64ad8d71-4064-43f9-9f62-81fdf5e9933a",
+						"exec": [
+							"pm.test(\"response is Unauthorized\", function () {\r",
+							"    pm.response.to.have.status(401);\r",
+							"});\r",
+							"pm.test(\"Subforum is retrieved\", function(){\r",
+							"    pm.response.to.be.json;\r",
+							"    pm.response.to.have.jsonBody(\"error\");\r",
+							"    pm.response.to.not.have.jsonBody(\"token\");\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.error).to.eql(\"Unable to delete. You are not an admin\");\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjMsImlhdCI6MTU0MTQ0NDg0NywiZXhwIjoxNTQyNjU0NDQ3LCJpc0FkbWluIjoiZmFsc2UifQ.pkVSDniGQ4GkhHJHG06-GeCr3NMzc246yOIOIWA-0Go",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:3000/forums/7",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"forums",
+						"7"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Borrar foro siendo admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "64ad8d71-4064-43f9-9f62-81fdf5e9933a",
+						"exec": [
+							"pm.test(\"response is ok\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Forum is deleted\", function(){\r",
+							"    pm.response.to.be.json;\r",
+							"    pm.response.to.have.jsonBody(\"message\");\r",
+							"    pm.response.to.not.have.jsonBody(\"error\");\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.message).to.eql(\"Deleted forum with id: 14\");\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjIsImlhdCI6MTU0MTQ0OTc5NywiZXhwIjoxNTQyNjU5Mzk3LCJpc0FkbWluIjoidHJ1ZSJ9.-JM_yx3lfoO15Pf99JJWxkxcUvxAMsjoz47bBo1oZmY",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:3000/forums/14",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"forums",
+						"14"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "obtener lista de foros",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6f086719-9382-4e7f-9fd0-ba1d18ef80f7",
+						"exec": [
+							"pm.test(\"response is ok\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"forums are retrieved\", function(){",
+							"        pm.response.to.have.body();",
+							"        pm.expect(pm.response.text()).to.include('{\"id\":1,\"name\":\"Foro general\"},{\"id\":2,\"name\":\"Otro foro\"}');",
+							"",
+							"    ",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:3000/forums",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"forums"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener listado de subforos que pertenecen al mismo foro",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "823b1b0e-133f-409a-b120-fb4211d240bf",
+						"exec": [
+							"",
+							"pm.test(\"response is ok\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Subforums are retrieve\", function(){",
+							"        pm.response.to.have.body();",
+							"        pm.expect(pm.response.text()).to.include('{\"id\":1,\"title\":\"Subforo divertido\",\"forum\":1},{\"id\":2,\"title\":\"Otro subforo\",\"forum\":1}');",
+							"    ",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:3000/forums/1/subforums",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"forums",
+						"1",
+						"subforums"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener listado de subforos que pertenecen al mismo foro pero éste no existe",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "823b1b0e-133f-409a-b120-fb4211d240bf",
+						"exec": [
+							"",
+							"pm.test(\"response is ok\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Subforums are retrieve\", function(){",
+							"        pm.response.to.have.body('[]');",
+							"    ",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:3000/forums/441/subforums",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"forums",
+						"441",
+						"subforums"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear un foro nuevo",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "26af7dd0-740b-4f12-98e0-8a7883b19186",
+						"exec": [
+							"",
+							"pm.test(\"response is created\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"pm.test(\"Subforums are retrieve\", function(){",
+							"    pm.response.to.have.jsonBody(\"id\");",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOjMsImlhdCI6MTU0MTQ0NDg0NywiZXhwIjoxNTQyNjU0NDQ3LCJpc0FkbWluIjoiZmFsc2UifQ.pkVSDniGQ4GkhHJHG06-GeCr3NMzc246yOIOIWA-0Go",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\" :\"Nuevo foro\"\n}"
+				},
+				"url": {
+					"raw": "localhost:3000/forums",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"forums"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear un foro nuevo sin estar logueado",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "26af7dd0-740b-4f12-98e0-8a7883b19186",
+						"exec": [
+							"",
+							"pm.test(\"response is forbidden\", function () {",
+							"    pm.response.to.have.status(403);",
+							"});",
+							"pm.test(\"Error is shown\", function(){",
+							"    pm.response.to.have.jsonBody(\"error\");",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.error).to.eql(\"Missing authorization header\");",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\" :\"Nuevo foro\"\n}"
+				},
+				"url": {
+					"raw": "localhost:3000/forums",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"forums"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
